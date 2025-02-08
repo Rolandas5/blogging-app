@@ -1,14 +1,19 @@
 {
   "blogs": [
     {
-      "name": "Debesys",
-      "description": "lengvi ",
-      "id": "d4f4"
+      "name": "Blogas veikia gerai",
+      "description": "Taip lauikai uzpildomi",
+      "id": "53b5"
     },
     {
-      "id": "a5db",
-      "name": "klokl",
-      "description": "oooooo"
+      "name": "Tikras blogas",
+      "description": "Ir galiu koreguoti",
+      "id": "f273"
+    },
+    {
+      "name": "Viskas veikia",
+      "description": "Puikiai kaip ir kitur namuose",
+      "id": "7283"
     }
   ]
 }

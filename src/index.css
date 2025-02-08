@@ -85,12 +85,15 @@ button {
   color: white;
   border: none;
   border-radius: 8px;
-  margin-left: 10px;
-  margin-right: 10px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
   transition: background 0.2 ease-in-out;
+}
+
+.button-edit {
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 button:hover {

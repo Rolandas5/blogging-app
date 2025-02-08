@@ -56,23 +56,29 @@ export const CreateBlog = () => {
   };
 
   useEffect(() => {
-    fetchPosts();
+    fetchPosts(); // Kai komponentas įsikrauna, užkrauname įrašus
   }, []);
 
   // Pridėti arba atnaujinti įrašą
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const payload = { name, description };
 
     if (editingPostId) {
-      await axios.put(`${api}/${editingPostId}`, { name, description });
-      setEditingPostId(null);
+      // Atnaujiname įrašą
+      await axios.put(`${api}/${editingPostId}`, payload);
     } else {
-      await axios.post(api, { name, description });
+      // Sukuriame naują įrašą
+      await axios.post(api, payload);
     }
+
+    // Po įrašymo arba atnaujinimo, užkrauname įrašus ir perkrauname puslapį
+    fetchPosts();
+    window.location.reload();
 
     setName('');
     setDescription('');
-    fetchPosts();
+    setEditingPostId(null); // Pašaliname redagavimo būseną
   };
 
   // Redaguoti įrašą
@@ -84,12 +90,19 @@ export const CreateBlog = () => {
 
   // Ištrinti įrašą
   const handleDelete = async (id) => {
-    await axios.delete(`${api}/${id}`);
-    fetchPosts();
+    try {
+      await axios.delete(`${api}/${id}`);
+      // Po ištrynimo užkrauname įrašus ir perkrauname puslapį
+      fetchPosts();
+      window.location.reload();
+    } catch (error) {
+      console.error('Klaida trinant įrašą:', error);
+    }
   };
 
   return (
     <div>
+      <h2>{editingPostId ? 'Edit Blog Post' : 'Create Blog Post'}</h2>
       <form className="create-post-form" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -115,7 +128,9 @@ export const CreateBlog = () => {
           <li key={post.id}>
             <strong>{post.name}</strong>
             <p>{post.description}</p>
-            <button onClick={() => handleEdit(post)}>Edit</button>
+            <button className="button-edit" onClick={() => handleEdit(post)}>
+              Edit
+            </button>
             <button onClick={() => handleDelete(post.id)}>Delete</button>
           </li>
         ))}

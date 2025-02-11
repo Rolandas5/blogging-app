@@ -7,7 +7,6 @@ export const Home = ({ blogs, onBlogClick }) => {
   const [isCreateFormVisible, setIsCreateFormVisible] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
-  // [{ id; '1', name: 'asd', 'asdf'}, {....}, {....}]
   const filteredBlogs = blogs.filter((blog) => {
     return blog.name.toLowerCase().includes(searchValue.toLowerCase());
   });
@@ -25,10 +24,9 @@ export const Home = ({ blogs, onBlogClick }) => {
       </button>
 
       {isCreateFormVisible ? (
-        // Jei isCreateFormVisible yra true
+        // Jeigu isCreateFormVisible yra true
         <CreateBlog />
       ) : (
-        // Jeigu isCreateFormVisible yra false
         <>
           <SearchContainer onSearch={handleSearch} />
           <div className="posts-container">

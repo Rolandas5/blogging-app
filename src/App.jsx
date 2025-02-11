@@ -17,8 +17,8 @@ export const App = () => {
   };
 
   // useEffect - naudojamas norint atlikti veiksmus, kai komponentas yra sugeneruojamas
-  // [] - tuscias masyvas reiskias, kad veiksmai esantys useEffect viduje, bet atliekami tik viena karta
-  // [kintamasis] - jeigu kintamasis pasikeicia, tai useEffect bus iskvieciamas dar karta
+  // [] - tuscias masyvas reiskias, kad veiksmai esantys useEffect viduje, but atliekami tik viena karta
+  // [kintamasis] - jeigu kintamasis pasikeicias, tai useEffect bus iskvieciamas dar karta
   useEffect(() => {
     fetchBlogs();
   }, []);
@@ -26,7 +26,11 @@ export const App = () => {
   return (
     <div className="app">
       {selectedBlog ? (
-        <din>Sveiki as divas</din>
+        <>
+          <div>{selectedBlog.id}</div>
+          <div>{selectedBlog.name}</div>
+          <div>{selectedBlog.description}</div>
+        </>
       ) : (
         <Home blogs={blogs} onBlogClick={handleBlogClick} />
       )}

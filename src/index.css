@@ -115,3 +115,29 @@ button:hover {
   font-size: 1rem;
   padding: 12px;
 }
+
+.blog-details {
+  background-color: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 50px;
+}
+
+.blog-details-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.blog-details-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.edit-button {
+  background-color: green;
+}
+
+.delete-button {
+  background-color: red;
+}

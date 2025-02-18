@@ -3,10 +3,12 @@ import axios from 'axios';
 import { Home } from './pages/Home';
 import { api } from './constants/globalConstants';
 import { BlogPage } from './pages/BlogPage';
+import { EditBlog } from './components/EditBlog';
 
 export const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [selectedBlog, setSelectedBlog] = useState(null);
+  const [isEditing, setIsEditing] = useState(false); // Pridėtas isEditing state
 
   const fetchBlogs = async () => {
     const response = await axios.get(api);
@@ -19,42 +21,68 @@ export const App = () => {
 
   const resetSelectedBlog = () => {
     setSelectedBlog(null);
+    setIsEditing(false); // Grąžiname isEditing į false
   };
 
-  // Funkcija blog'ui ištrinti
   const deleteBlog = async (id) => {
     try {
-      // DELETE užklausa
       await axios.delete(`${api}/${id}`);
-
-      // Atnaujinam state – pašalinam ištrintą blog'ą iš sąrašo
       setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
-
-      // Grįžtam į pagrindinį puslapį, jei vartotojas buvo BlogPage
       resetSelectedBlog();
     } catch (error) {
       console.error('Klaida trinant įrašą:', error);
     }
   };
 
-  // useEffect - naudojamas norint atlikti veiksmus, kai komponentas yra sugeneruojamas
-  // [] - tuscias masyvas reiskias, kad veiksmai esantys useEffect viduje, but atliekami tik viena karta
-  // [kintamasis] - jeigu kintamasis pasikeicias, tai useEffect bus iskvieciamas dar karta
+  const handleEditBlog = () => {
+    console.log('Edit blog clicked');
+    setIsEditing(true); // Įjungiam redagavimo režimą
+  };
+
+  const handleCancelEdit = (updatedBlog) => {
+    console.log('Cancel edit clicked');
+    setIsEditing(false);
+    setSelectedBlog(updatedBlog); // Atnaujina blogContent su redaguotais duomenimis
+  };
+
+  // Atnaujiname serverio duomenis
+  const handleSaveEdit = async (updatedBlog) => {
+    try {
+      // Atlikti PUT užklausą, kad atnaujinti blogą serverio pusėje
+      await axios.put(`${api}/${updatedBlog.id}`, updatedBlog);
+
+      // Atnaujiname React būsenoje
+      setSelectedBlog(updatedBlog);
+
+      // Užbaigiame redagavimą
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Klaida išsaugant blogą:', error);
+    }
+  };
+
   useEffect(() => {
     fetchBlogs();
   }, []);
 
   return (
     <div className="app">
-      {/* Jeigu pasirinktas blogas, atvaizduoja BlogPage.jsx */}
       {selectedBlog ? (
-        <BlogPage
-          blogContent={selectedBlog}
-          handleBackToHomeClick={resetSelectedBlog}
-          handleDeleteBlog={deleteBlog}
-        />
+        isEditing ? (
+          <EditBlog
+            blogContent={selectedBlog}
+            setSelectedBlog={setSelectedBlog}
+            handleCancelEdit={handleCancelEdit}
+          />
+        ) : (
+          <BlogPage
+            blogContent={selectedBlog}
+            handleBackToHomeClick={resetSelectedBlog}
+            handleDeleteBlog={deleteBlog}
+            handleEditBlog={handleEditBlog}
+          />
+        )
       ) : (
-        // Jei nepasirinkus, atvaizduoja bendrini Home page
         <Home blogs={blogs} onBlogClick={handleBlogClick} />
       )}
     </div>

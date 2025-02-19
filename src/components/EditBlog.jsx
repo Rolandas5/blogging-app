@@ -1,34 +1,43 @@
 import { useState } from 'react';
+import axios from 'axios';
+import { api } from '../constants/globalConstants';
 
-export const EditBlog = ({ blogContent, handleSaveEdit, handleCancelEdit }) => {
-  const [title, setTitle] = useState(blogContent.name);
+// blogContent = { id: 1, name: "asada", description: "asdas"}
+
+export const EditBlog = ({ handleCancelClick, blogContent }) => {
+  const [name, setName] = useState(blogContent.name);
   const [description, setDescription] = useState(blogContent.description);
 
-  const handleSave = () => {
-    const updatedBlog = {
-      ...blogContent,
-      name: title,
-      description: description,
-    };
-    handleSaveEdit(updatedBlog); // Išsaugome pakeitimus
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    await axios.put(`${api}/${blogContent.id}`, {
+      name,
+      description,
+    });
+
+    window.location.reload();
   };
 
   return (
-    <div>
-      <h2>Edit Blog</h2>
+    <form className="edit-post-form" onSubmit={handleSubmit}>
       <input
         type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Title"
+        placeholder="Blog name"
+        value={name}
+        required
+        onChange={(event) => setName(event.target.value)}
       />
       <textarea
+        placeholder="Blog description"
         value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        placeholder="Description"
-      />
-      <button onClick={handleSave}>Save</button>
-      <button onClick={() => handleCancelEdit(blogContent)}>Cancel</button>
-    </div>
+        required
+        onChange={(event) => setDescription(event.target.value)}
+      ></textarea>
+      <button type="submit">Save Changes</button>
+      <button type="button" onClick={handleCancelClick}>
+        Cancel
+      </button>
+    </form>
   );
 };

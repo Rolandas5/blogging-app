@@ -1,47 +1,47 @@
-import React, { useState } from 'react';
-import { EditBlog } from './../components/EditBlog';
+import axios from 'axios';
+import { api } from '../constants/globalConstants';
+import { useState } from 'react';
+import { EditBlog } from '../components/EditBlog';
 
-export const BlogPage = ({
-  blogContent,
-  handleBackToHomeClick,
-  handleDeleteBlog,
-}) => {
+// Spaudzia Cancel -> pasako Tevui kad paslaude -> Tevas pasako ka daryt kai pagaus callback
+
+export const BlogPage = ({ blogContent, handleBackToHomeClick }) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleEditClick = () => {
-    setIsEditing(true);
+  const handleDelete = async () => {
+    await axios.delete(`${api}/${blogContent.id}`);
+    handleBackToHomeClick();
   };
 
-  const handleCancelEdit = () => {
+  const handleReset = () => {
     setIsEditing(false);
   };
 
   return (
     <>
-      <div className="blog-details-buttons">
-        <button onClick={handleBackToHomeClick}>Back to Home</button>
-        <div className="blog-details-controls">
-          <button className="edit-button" onClick={handleEditClick}>
-            Edit
-          </button>
-          <button
-            className="delete-button"
-            onClick={() => handleDeleteBlog(blogContent.id)}
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-
       {isEditing ? (
-        <EditBlog
-          blogContent={blogContent}
-          handleCancelEdit={handleCancelEdit}
-        />
+        // Priima vaika
+        <EditBlog blogContent={blogContent} handleCancelClick={handleReset} />
       ) : (
-        <div className="blog-details">
-          <h2>{blogContent.name}</h2>
-          <p>{blogContent.description}</p>
+        <div className="blog-page">
+          <div className="blog-details-buttons">
+            <button onClick={handleBackToHomeClick}>Back to Home</button>
+            <div className="blog-details-controls">
+              <button
+                className="edit-button"
+                onClick={() => setIsEditing(true)}
+              >
+                Edit
+              </button>
+              <button className="delete-button" onClick={handleDelete}>
+                Delete
+              </button>
+            </div>
+          </div>
+          <div className="blog-details">
+            <h2>{blogContent.name}</h2>
+            <p>{blogContent.description}</p>
+          </div>
         </div>
       )}
     </>

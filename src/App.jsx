@@ -21,6 +21,7 @@ export const App = () => {
 
   const resetSelectedBlog = () => {
     setSelectedBlog(null);
+    fetchBlogs();
     setIsEditing(false); // Grąžiname isEditing į false
   };
 

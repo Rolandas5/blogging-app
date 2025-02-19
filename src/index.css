@@ -56,7 +56,8 @@ body {
   margin-top: 150px;
 }
 
-.create-post-form {
+.create-post-form,
+.edit-post-form {
   display: flex;
   flex-direction: column;
   gap: 12px;

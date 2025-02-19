@@ -20,7 +20,7 @@ export const BlogPage = ({ blogContent, handleBackToHomeClick }) => {
   return (
     <>
       {isEditing ? (
-        // Priima vaika
+        // Priima vaika tevinis komponentas - Editblog
         <EditBlog blogContent={blogContent} handleCancelClick={handleReset} />
       ) : (
         <div className="blog-page">
